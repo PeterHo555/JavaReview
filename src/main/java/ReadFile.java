@@ -9,17 +9,55 @@ public class ReadFile {
         try {
             BufferedReader in = new BufferedReader(new FileReader(path));
 
-            while (in.ready()){
-                StringBuffer stringBuffer = new StringBuffer(in.readLine());
-                System.out.println("read a line: "+stringBuffer);
-            }
+//            while (in.ready()){
+//                StringBuffer stringBuffer = new StringBuffer(in.readLine());
+//                System.out.println("read a line: "+stringBuffer);
+//            }
         }catch (IOException e){
 
         }
     }
 
-    public void run(){
-
+    public static String readLastLine(File file, String charset) throws IOException {
+        if (!file.exists() || file.isDirectory() || !file.canRead()) {
+            return null;
+        }
+        RandomAccessFile raf = null;
+        try {
+            raf = new RandomAccessFile(file, "r");
+            long len = raf.length();
+            if (len == 0L) {
+                return "";
+            } else {
+                long pos = len - 1;
+                while (pos > 0) {
+                    pos--;
+                    raf.seek(pos);
+                    if (raf.readByte() == '\n') {
+                        break;
+                    }
+                }
+                if (pos == 0) {
+                    raf.seek(0);
+                }
+                byte[] bytes = new byte[(int) (len - pos)];
+                raf.read(bytes);
+                if (charset == null) {
+                    return new String(bytes);
+                } else {
+                    return new String(bytes, charset);
+                }
+            }
+        } catch (FileNotFoundException e) {
+        } finally {
+            if (raf != null) {
+                try {
+                    raf.close();
+                } catch (Exception e2) {
+                }
+            }
+        }
+        return null;
     }
 //    public static void main(String[] args) {
 //        try {
