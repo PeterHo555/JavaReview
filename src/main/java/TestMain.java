@@ -12,15 +12,16 @@ public class TestMain {
 //        System.out.println(jsonObject);
 //        WriteFile wf = new WriteFile();
 //        wf.write();
-        String filePath = "newFile.txt";
+        String filePath = "data.txt";
         OpFile opFile = new OpFile();
 
         while (true){
-            WriteThread writeThread = new WriteThread(filePath, opFile);
-            writeThread.start();
-            writeThread.sleep(3000);
+//            WriteThread writeThread = new WriteThread(filePath, opFile);
+//            writeThread.start();
+//            writeThread.sleep(3000);
             ReadThread readThread = new ReadThread(filePath, opFile);
             readThread.start();
+            readThread.sleep(3000);
 
         }
 
